@@ -1,0 +1,20 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: add-safe-security-defaults
+spec:
+  mutateExistingOnPolicyUpdate: true
+  rules:
+  - name: add-security-context
+    match:
+      resources:
+        kinds: 
+        - Pod
+    mutate:
+      patchStrategicMerge:
+        spec:
+          containers:
+          - securityContext:
+              runAsNonRoot: true
+              runAsUser: 1000
+              allowPrivilegeEscalation: false

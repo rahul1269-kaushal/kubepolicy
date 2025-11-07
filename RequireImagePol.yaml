@@ -1,0 +1,18 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-image-pull-always
+spec:
+  validationFailureAction: enforce
+  rules:
+  - name: force-pull-policy
+    match:
+      resources:
+        kinds:
+        - Pod
+    validate:
+      message: "imagePullPolicy must be Always"
+      pattern:
+        spec:
+          containers:
+          - imagePullPolicy: "Always"
